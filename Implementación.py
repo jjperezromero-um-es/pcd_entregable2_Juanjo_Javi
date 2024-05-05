@@ -129,8 +129,8 @@ class EstrategiaMaxMin(EstrategiaCalculo):
             print(f"Máximo: {max(temps)}, Mínimo: {min(temps)}")
 
 if __name__ == '__main__':
-    estrategia = int(input("Seleccione la estrategia de cálculo (1: Media y Desviación, 2: Cuantiles, 3: Máximo y Mínimo): "))
-    if estrategia == 1:
+    estrategia = input("Seleccione la estrategia de cálculo (1: Media y Desviación, 2: Cuantiles, 3: Máximo y Mínimo): ")
+    if estrategia == '1':
         estrategia = EstrategiaMediaDesviacion()
     elif estrategia == 2:
         estrategia = EstrategiaCuantiles()
@@ -138,5 +138,6 @@ if __name__ == '__main__':
         estrategia = EstrategiaMaxMin()
     else:
         raise ValueError("Estrategia inválida. Escriba 1, 2 o 3.")
+    
     sistema = SistemaIoT.obtener_instancia(estrategia)
-    sistema.iniciar(60)  # Ejecuta el monitoreo por 60 segundos
+    sistema.iniciar(tiempo_ejecucion)
