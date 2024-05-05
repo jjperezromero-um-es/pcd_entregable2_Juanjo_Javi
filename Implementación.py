@@ -126,7 +126,19 @@ class EstrategiaMaxMin(EstrategiaCalculo):
             print(f"Máximo: {max(temps)}, Mínimo: {min(temps)}")
 
 if __name__ == '__main__':
-    estrategia = input("Seleccione la estrategia de cálculo (1: Media y Desviación, 2: Cuantiles, 3: Máximo y Mínimo): ")
+    while True:
+        tiempo_ejecucion = input("Ingrese el tiempo de ejecución en segundos del muestreo que se va a llevar a cabo: ")
+        
+        if tiempo_ejecucion.isdigit():  
+            tiempo_ejecucion = int(tiempo_ejecucion)  
+            if tiempo_ejecucion >= 5:  
+                break  
+            else:
+                print("\n------Error------\n\nEl tiempo de ejecución debe ser un número entero positivo mayor o igual a 5.\n\n------Intente de nuevo------\n")
+        else:
+            print("\n------Error------\n\nEl tiempo de ejecución debe ser un número entero positivo mayor o igual a 5.\n\n------Intente de nuevo------\n")
+    
+    estrategia = input("\nSeleccione la estrategia de cálculo (1: Media y Desviación, 2: Cuantiles, 3: Máximo y Mínimo): ")
     if estrategia == '1':
         estrategia = EstrategiaMediaDesviacion()
     elif estrategia == '2':
@@ -135,5 +147,6 @@ if __name__ == '__main__':
         estrategia = EstrategiaMaxMin()
     else:
         raise ValueError("Estrategia inválida. Escriba 1, 2 o 3.")
+    
     sistema = SistemaIoT.obtener_instancia(estrategia)
-    sistema.iniciar(60)  # Ejecuta el monitoreo por 60 segundos
+    sistema.iniciar(tiempo_ejecucion)
