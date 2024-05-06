@@ -1,7 +1,7 @@
-<diagram program="umletino" version="15.1"><zoom_level>11</zoom_level><element><id>UMLClass</id><coordinates><x>0</x><y>385</y><w>374</w><h>55</h></coordinates><panel_attributes>EstrategiaCuantiles
+<diagram program="umletino" version="15.1"><zoom_level>8</zoom_level><element><id>UMLClass</id><coordinates><x>0</x><y>383</y><w>272</w><h>40</h></coordinates><panel_attributes>EstrategiaCuantiles
 --
 + calcular(temperaturas: List of List): str
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>968</x><y>286</y><w>374</w><h>187</h></coordinates><panel_attributes>Manejador
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>704</x><y>311</y><w>272</w><h>136</h></coordinates><panel_attributes>Manejador
 --
 + instance: IoTSystemManager
 + currentStrategy: StatisticStrategy
@@ -13,7 +13,7 @@ bg=orange</panel_attributes><additional_attributes></additional_attributes></ele
 + setStrategy(strategy: StatisticStrategy): void
 + updateTemperature(temp: float): void
 + displayStatistics(): void
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>957</x><y>0</y><w>374</w><h>143</h></coordinates><panel_attributes>Sensor Temperatura Observer
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>696</x><y>103</y><w>272</w><h>104</h></coordinates><panel_attributes>Observable
 --
 + _observers: List of Observer
 + currentTemperature: float
@@ -22,26 +22,35 @@ bg=orange</panel_attributes><additional_attributes></additional_attributes></ele
 + unsubscribe(observer: Observer): void
 + notifyObservers(): void
 + measureTemperature(): void
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>264</y><w>374</w><h>55</h></coordinates><panel_attributes>EstrategiaMediaDesviacion
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>295</y><w>272</w><h>40</h></coordinates><panel_attributes>EstrategiaMediaDesviacion
 --
 + calcular(temperaturas: List of List): str
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>495</y><w>374</w><h>55</h></coordinates><panel_attributes>EstrategiaMaxMin
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>463</y><w>272</w><h>40</h></coordinates><panel_attributes>EstrategiaMaxMin
 --
 + calcular(temperaturas: List of List): str
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>968</x><y>572</y><w>374</w><h>110</h></coordinates><panel_attributes>Gestor de alertas Chain of Responsibility
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>704</x><y>519</y><w>272</w><h>80</h></coordinates><panel_attributes>Operador
 --
 + next: AlertManager
 + threshold: float
 --
 + setNext(manager: AlertManager): void
 + handleRequest(temp: float): void
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>220</x><y>748</y><w>374</w><h>55</h></coordinates><panel_attributes>Datos 
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>160</x><y>647</y><w>272</w><h>40</h></coordinates><panel_attributes>Datos 
 --
 + logData(data: String): void
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>220</x><y>660</y><w>374</w><h>55</h></coordinates><panel_attributes>Interfaz visual
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>160</x><y>583</y><w>272</w><h>40</h></coordinates><panel_attributes>Interfaz visual
 --
 + displayData(data: String): void
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>473</x><y>374</y><w>374</w><h>55</h></coordinates><panel_attributes>EstrategiaCalculo
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>344</x><y>375</y><w>272</w><h>40</h></coordinates><panel_attributes>EstrategiaCalculo
 --
 + calcular(temperaturas: List of List)
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>363</x><y>396</y><w>132</w><h>143</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>100;10;10;110</additional_attributes></element><element><id>Relation</id><coordinates><x>363</x><y>396</y><w>132</w><h>33</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>100;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>363</x><y>275</y><w>132</w><h>154</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>100;120;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1155</x><y>132</y><w>33</w><h>176</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;140;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>836</x><y>385</y><w>154</w><h>33</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>120;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1144</x><y>462</y><w>33</w><h>132</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>1111</x><y>132</y><w>33</w><h>176</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;140;10;10</additional_attributes></element></diagram>
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>264</x><y>391</y><w>96</w><h>104</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>100;10;10;110</additional_attributes></element><element><id>Relation</id><coordinates><x>264</x><y>391</y><w>96</w><h>24</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>100;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>264</x><y>303</y><w>96</w><h>112</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>100;120;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>840</x><y>199</y><w>24</w><h>128</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;140;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>608</x><y>383</y><w>112</w><h>24</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>120;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>832</x><y>439</y><w>24</w><h>96</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>808</x><y>199</y><w>24</w><h>128</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;140;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1128</x><y>335</y><w>272</w><h>112</h></coordinates><panel_attributes>SistemaIot
+--
+- _unicaInstancia: void
+- observable: Observable
+- manejador: Manejador
+- operador: Operador
+--
++ obtener_instancia: SistemaIot
++ iniciar: void
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>960</x><y>159</y><w>184</w><h>256</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>210;300;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>968</x><y>375</y><w>176</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>200;30;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>968</x><y>391</y><w>176</w><h>184</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>200;10;10;210</additional_attributes></element></diagram>
