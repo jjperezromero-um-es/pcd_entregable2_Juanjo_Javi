@@ -5,15 +5,6 @@ from abc import ABC, abstractmethod
 from functools import reduce
 from statistics import mean, stdev, quantiles
 
-class ErrorDeConfiguracion(Exception):
-    pass
-
-class ErrorDeTemperatura(Exception):
-    pass
-
-class ErrorDeCalculo(Exception):
-    pass
-
 class SistemaIoT:
     _unicaInstancia = None
 
@@ -21,10 +12,10 @@ class SistemaIoT:
         self.estrategia = estrategia
         self.datos_temperatura = []
         self.observable = Observable()
-        manejador_umbral = ManejadorUmbral()
+        self.manejador_umbral = ManejadorUmbral()
         self.manejador = ManejadorCalculo(self.estrategia, ManejadorUmbral())
         self.operador = Operador(self.manejador)
-        self.observable.register_observer(self.operador)
+        self.observable.registrar_observadores(self.operador)
 
     @classmethod
     def obtener_instancia(cls, estrategia=None):
@@ -39,74 +30,74 @@ class SistemaIoT:
 
 class Observable:
     def __init__(self):
-        self._observers = []
+        self._observadores= []
 
-    def register_observer(self, observer):
-        self._observers.append(observer)
+    def registrar_observadores(self, observador):
+        self._observadores.append(observador)
 
-    def notify_observers(self, data):
-        for observer in self._observers:
-            observer.update(data)
+    def notificar_observadores(self, data):
+        for observador in self._observadores:
+            observador.actualizar(data)
 
     def run(self, run_time_seconds):
         start_time = time.time()
         while (time.time() - start_time) < run_time_seconds: # El bucle termina cuando se cumple el tiempo de ejecución
             timestamp = datetime.now()
-            temperature = random.randint(14, 33)
-            self.notify_observers((timestamp, temperature))
+            temperatura = random.randint(14, 33)
+            self.notificar_observadores((timestamp, temperatura))
             time.sleep(5) # Cada 5 segundos se genera una nueva medición de temperatura
 
-class Observer(ABC):
+class observador(ABC):
     @abstractmethod
-    def update(self, data):
+    def actualizar(self, data):
         pass
 
-class Operador(Observer):
+class Operador(observador):
     def __init__(self, manejador):
         self.manejador = manejador
 
-    def update(self, data):
+    def actualizar(self, data):
         # Imprime por pantalla la información de la medición de temperatura y la fecha
         print(f"\n{'-' * 80}")
         print(f"Timestamp: {data[0]}. Temperatura actual: {data[1]}°C")
-        # Calcula las estadísticas de temperatura usando la estrategia seleccionada usando la funcion handle_request del Manejador
-        self.manejador.handle_request(data)
+        # Calcula las estadísticas de temperatura usando la estrategia seleccionada usando la funcion manejador_peticion del Manejador
+        self.manejador.manejador_peticion(data)
 
 class Manejador(ABC):
-    def __init__(self, successor=None):
-        self.successor = successor
+    def __init__(self, sucesor=None):
+        self.sucesor = sucesor
 
     @abstractmethod
-    def handle_request(self, data):
-        if self.successor:
-            self.successor.handle_request(data)
+    def manejador_peticion(self, data):
+        if self.sucesor:
+            self.sucesor.manejador_peticion(data)
 
 class ManejadorCalculo(Manejador):
-    def __init__(self, estrategia, successor=None):
-        super().__init__(successor)
+    def __init__(self, estrategia, sucesor=None):
+        super().__init__(sucesor)
         self.estrategia = estrategia
         self.temperaturas = []
 
-    def handle_request(self, data):
-        timestamp, temperature = data
-        self.temperaturas.append((timestamp, temperature))
+    def manejador_peticion(self, data):
+        timestamp, temperatura = data
+        self.temperaturas.append((timestamp, temperatura))
         self.estrategia.calcular(self.temperaturas)  # Pasa todas las temperaturas recogidas hasta ahora
-        if self.successor:
-            self.successor.handle_request(data)
+        if self.sucesor:
+            self.sucesor.manejador_peticion(data)
         
 
 class ManejadorUmbral(Manejador):
-    def __init__(self, successor=None):
-        super().__init__(successor)
+    def __init__(self, sucesor=None):
+        super().__init__(sucesor)
         self.temperaturas = []
 
-    def handle_request(self, data):
-        timestamp, temperature = data
-        self.temperaturas.append((timestamp, temperature))
-        self.verificar_umbral(temperature)
+    def manejador_peticion(self, data):
+        timestamp, temperatura = data
+        self.temperaturas.append((timestamp, temperatura))
+        self.verificar_umbral(temperatura)
         self.comprobar_aumento_rapido()
-        if self.successor:
-            self.successor.handle_request(data)
+        if self.sucesor:
+            self.sucesor.manejador_peticion(data)
 
     def verificar_umbral(self, temperatura_actual, umbral=25):
         if temperatura_actual > umbral:
@@ -129,9 +120,13 @@ class EstrategiaCalculo(ABC):
 class EstrategiaMediaDesviacion(EstrategiaCalculo):
     def calcular(self, temperaturas):
         if len(temperaturas) >= 2:
-            #temperaturas en una lista (cojemos x[1] ya que x es una tupla (timestamp,temp))
             temps = list(map(lambda x: x[1], temperaturas))
-            print(f"Media: {mean(temps):.2f}, Desviación estándar: {stdev(temps):.2f}")
+            total_sum = reduce(lambda x, y: x + y, temps)
+            media = total_sum / len(temps)
+            suma_cuadrados = reduce(lambda x, y: x + (y - media) ** 2, temps, 0)
+            desviacion_estandar = (suma_cuadrados / (len(temps) - 1)) ** 0.5
+            
+            print(f"Media: {media:.2f}, Desviación estándar: {desviacion_estandar:.2f}")
 
 class EstrategiaCuantiles(EstrategiaCalculo):
     def calcular(self, temperaturas):
@@ -154,10 +149,10 @@ if __name__ == '__main__':
         tiempo_ejecucion = input("\nIngrese el tiempo de ejecución en segundos del muestreo que se va a llevar a cabo: ")
         if tiempo_ejecucion.isdigit():  
             tiempo_ejecucion = int(tiempo_ejecucion)  
-            if tiempo_ejecucion >= 5:  
+            if tiempo_ejecucion > 5:  
                 seguir = False  
             else:
-                print("\n------Error------\n\nEl tiempo de ejecución debe ser un número entero positivo mayor o igual a 5.\n\n------Intente de nuevo------")
+                print("\n------Error------\n\nEl tiempo de ejecución debe ser un número entero positivo mayor a 5.\n\n------Intente de nuevo------")
         else:
             print("\n------Error------\n\nEl tiempo de ejecución debe ser un número entero positivo mayor o igual a 5.\n\n------Intente de nuevo------")
     
