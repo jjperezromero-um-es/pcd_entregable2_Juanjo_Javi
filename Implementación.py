@@ -12,8 +12,8 @@ class SistemaIoT:
         self.estrategia = estrategia
         self.datos_temperatura = []
         self.observable = Observable()
-        self.manejador_umbral = ManejadorUmbral()
-        self.manejador = ManejadorCalculo(self.estrategia, ManejadorUmbral())
+        self.ManejadorCondiciones = ManejadorCondiciones()
+        self.manejador = ManejadorCalculo(self.estrategia, ManejadorCondiciones())
         self.operador = Operador(self.manejador)
         self.observable.registrar_observadores(self.operador)
 
@@ -86,7 +86,7 @@ class ManejadorCalculo(Manejador):
             self.sucesor.manejador_peticion(data)
         
 
-class ManejadorUmbral(Manejador):
+class ManejadorCondiciones(Manejador):
     def __init__(self, sucesor=None):
         super().__init__(sucesor)
         self.temperaturas = []
