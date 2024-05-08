@@ -5,6 +5,19 @@ from abc import ABC, abstractmethod
 from functools import reduce
 from statistics import mean, stdev, quantiles
 
+# Definición de Excepciones Personalizadas
+class ErrorDeEntrada(Exception):
+    """Excepción para manejar errores en las entradas de los usuarios."""
+    pass
+
+class ErrorDeCalculo(Exception):
+    """Excepción para manejar errores durante los cálculos estadísticos."""
+    pass
+
+class ErrorDeSistema(Exception):
+    """Excepción para manejar errores generales del sistema."""
+    pass
+
 class SistemaIoT:
     _unicaInstancia = None
 
@@ -26,7 +39,10 @@ class SistemaIoT:
         return cls._unicaInstancia
 
     def iniciar(self, run_time_seconds):
-        self.observable.run(run_time_seconds)
+        try:
+            self.observable.run(run_time_seconds)
+        except Exception as e:
+            raise ErrorDeSistema(f"Error en el sistema IoT: {str(e)}")
 
 class Observable:
     def __init__(self):
@@ -57,11 +73,12 @@ class Operador(observador):
         self.manejador = manejador
 
     def actualizar(self, data):
-        # Imprime por pantalla la información de la medición de temperatura y la fecha
         print(f"\n{'-' * 80}")
         print(f"Timestamp: {data[0]}. Temperatura actual: {data[1]}°C")
-        # Calcula las estadísticas de temperatura usando la estrategia seleccionada usando la funcion manejador_peticion del Manejador
-        self.manejador.manejador_peticion(data)
+        try:
+            self.manejador.manejador_peticion(data)
+        except ErrorDeCalculo as e:
+            print(f"Error durante el cálculo: {e}")
 
 class Manejador(ABC):
     def __init__(self, sucesor=None):
@@ -81,10 +98,12 @@ class ManejadorCalculo(Manejador):
     def manejador_peticion(self, data):
         timestamp, temperatura = data
         self.temperaturas.append((timestamp, temperatura))
-        self.estrategia.calcular(self.temperaturas)  # Pasa todas las temperaturas recogidas hasta ahora
+        try:
+            self.estrategia.calcular(self.temperaturas)
+        except Exception as e:
+            raise ErrorDeCalculo(f"Error en el cálculo de estadísticas: {e}")
         if self.sucesor:
             self.sucesor.manejador_peticion(data)
-        
 
 class ManejadorCondiciones(Manejador):
     def __init__(self, sucesor=None):
@@ -94,8 +113,11 @@ class ManejadorCondiciones(Manejador):
     def manejador_peticion(self, data):
         timestamp, temperatura = data
         self.temperaturas.append((timestamp, temperatura))
-        self.verificar_umbral(temperatura)
-        self.comprobar_aumento_rapido()
+        try:
+            self.verificar_umbral(temperatura)
+            self.comprobar_aumento_rapido()
+        except Exception as e:
+            raise ErrorDeCalculo(f"Error al verificar condiciones: {e}")
         if self.sucesor:
             self.sucesor.manejador_peticion(data)
 
@@ -109,11 +131,13 @@ class ManejadorCondiciones(Manejador):
             mediciones_recientes = list(filter(lambda x: (ultimo_ts - x[0]).seconds <= 30, self.temperaturas[:-1]))
             if any(ultima_temp - temperatura > 10 for _, temperatura in mediciones_recientes):
                 print("Alerta: Incremento de temperatura > 10°C en los últimos 30 segundos.")
-        
+
 
 class EstrategiaCalculo(ABC):
     @abstractmethod
     def calcular(self, temperaturas):
+        if not temperaturas:
+            raise ErrorDeCalculo("Dato de entrada vacío o incorrecto")
         pass
 
 #A continuacion las implementaciones de cada estrategia de calculo que tendra el sistema
@@ -121,26 +145,37 @@ class EstrategiaMediaDesviacion(EstrategiaCalculo):
     def calcular(self, temperaturas):
         if len(temperaturas) >= 2:
             temps = list(map(lambda x: x[1], temperaturas))
-            total_sum = reduce(lambda x, y: x + y, temps)
-            media = total_sum / len(temps)
-            suma_cuadrados = reduce(lambda x, y: x + (y - media) ** 2, temps, 0)
-            desviacion_estandar = (suma_cuadrados / (len(temps) - 1)) ** 0.5
-            
-            print(f"Media: {media:.2f}, Desviación estándar: {desviacion_estandar:.2f}")
+            try:
+                total_sum = reduce(lambda x, y: x + y, temps)
+                media = total_sum / len(temps)
+                suma_cuadrados = reduce(lambda x, y: x + (y - media) ** 2, temps, 0)
+                desviacion_estandar = (suma_cuadrados / (len(temps) - 1)) ** 0.5
+                print(f"Media: {media:.2f}, Desviación estándar: {desviacion_estandar:.2f}")
+            except Exception:
+                raise ErrorDeCalculo("Error en cálculo de media y desviación estándar.")
+
 
 class EstrategiaCuantiles(EstrategiaCalculo):
     def calcular(self, temperaturas):
-        if len(temperaturas) >= 2:
+        if len(temperaturas) < 2:
+            raise ErrorDeCalculo("Datos insuficientes para calcular los cuantiles.")
+        else:
             temps = list(map(lambda x: x[1], temperaturas))
-            print(f"Cuantiles: {quantiles(temps)}")
+            try:
+                print(f"Cuantiles: {quantiles(temps)}")
+            except Exception:
+                raise ErrorDeCalculo("Error en el cálculo de cuantiles.")
 
 class EstrategiaMaxMin(EstrategiaCalculo):
     def calcular(self, temperaturas):
         if temperaturas:
             temps = list(map(lambda x: x[1], temperaturas))
-            maximo = reduce(lambda x, y: x if x > y else y, temps)
-            minimo = reduce(lambda x, y: x if x < y else y, temps)
-            print(f"Máximo: {maximo}, Mínimo: {minimo}")
+            try:
+                maximo = reduce(lambda x, y: x if x > y else y, temps)
+                minimo = reduce(lambda x, y: x if x < y else y, temps)
+                print(f"Máximo: {maximo}, Mínimo: {minimo}")
+            except Exception:
+                raise ErrorDeCalculo("Error en el cálculo de máximo y mínimo.")
 
 if __name__ == '__main__':
     # Bucle para que el usuario pueda elegir la cantidad de tiempo de ejecución.
