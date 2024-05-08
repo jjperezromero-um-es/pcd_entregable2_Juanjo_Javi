@@ -1,0 +1,67 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>170</x><y>220</y><w>210</w><h>100</h></coordinates><panel_attributes>Observable
+-
++ observers:list
+-
++ register_observer(observer)
++ remove_observer(observer)
++ notify_observers(date_temp)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>470</y><w>210</w><h>140</h></coordinates><panel_attributes>Sensor
+-
++ name
++ running:bool
++ pause_event : threading.Event()
++ run()
++ pause()
++ resume()
++ exit()</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>90</x><y>310</y><w>190</w><h>180</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>170;10;170;90;10;90;10;160</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1220</x><y>210</y><w>210</w><h>70</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+Observer
+-
++ update(date_temp)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1280</x><y>190</y><w>100</w><h>40</h></coordinates><panel_attributes>/AbstractClass/
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1220</x><y>410</y><w>220</w><h>180</h></coordinates><panel_attributes>SistemaIoT
+-
+- __instance : SistemaIoT()
+-
+- manager_chain : Manejador()
+- date_temp: List[Tuple[timestamp, t]]
+- date: List[timestamp] 
+- temp: List
+-
++ obtener_instancia(cls)
++ get_date_temp()
++ get_date()
++ get_temp()</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1320</x><y>270</y><w>30</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;140</additional_attributes></element><element><id>UMLClass</id><coordinates><x>490</x><y>230</y><w>210</w><h>90</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+Manejador
+-
++ sucesor : Manejador
+-
+manejar_date_temp(date, temp)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>540</x><y>210</y><w>100</w><h>40</h></coordinates><panel_attributes>/AbstractClass/
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>280</x><y>460</y><w>210</w><h>90</h></coordinates><panel_attributes>Aumento
+-
+manejar_date_temp(date, temp)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>380</x><y>310</y><w>220</w><h>170</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>200;10;10;150</additional_attributes></element><element><id>UMLClass</id><coordinates><x>510</x><y>460</y><w>210</w><h>90</h></coordinates><panel_attributes>Umbral
+-
+manejar_date_temp(date, temp)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>580</x><y>310</y><w>50</w><h>170</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;30;150</additional_attributes></element><element><id>UMLClass</id><coordinates><x>750</x><y>460</y><w>210</w><h>90</h></coordinates><panel_attributes>ContextoEstadistico
+-
++ strategy
+-
++ set_strategy(strategy : Estrategy)
++ manejar_date_temp(date, temp)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>610</x><y>310</y><w>240</w><h>170</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;220;150</additional_attributes></element><element><id>UMLClass</id><coordinates><x>970</x><y>680</y><w>210</w><h>70</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+Strategy
+-
++ execute()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1030</x><y>660</y><w>100</w><h>40</h></coordinates><panel_attributes>/AbstractClass/
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>850</x><y>540</y><w>140</w><h>200</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=Estrategia</panel_attributes><additional_attributes>10;10;10;180;120;180</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1290</x><y>900</y><w>210</w><h>70</h></coordinates><panel_attributes>StrategyMeanSd
+-
++ execute(date, temp)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>790</x><y>900</y><w>210</w><h>70</h></coordinates><panel_attributes>StrategyCuantil
+-
++ execute(date, temp)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1040</x><y>900</y><w>210</w><h>70</h></coordinates><panel_attributes>StrategyMaxMin
+-
++ execute(date, temp)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1070</x><y>740</y><w>90</w><h>180</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;110;70;110;70;160</additional_attributes></element><element><id>Relation</id><coordinates><x>870</x><y>740</y><w>230</w><h>180</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>210;10;210;110;10;110;10;160</additional_attributes></element><element><id>Relation</id><coordinates><x>1070</x><y>740</y><w>340</w><h>180</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;110;320;110;320;160</additional_attributes></element><element><id>Relation</id><coordinates><x>250</x><y>90</y><w>1060</w><h>150</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+</panel_attributes><additional_attributes>10;130;10;20;1040;20;1040;120</additional_attributes></element><element><id>Relation</id><coordinates><x>630</x><y>150</y><w>200</w><h>150</h></coordinates><panel_attributes>lt=&lt;&lt;-
+manejador</panel_attributes><additional_attributes>10;80;10;20;160;20;160;130;70;130</additional_attributes></element><element><id>UMLNote</id><coordinates><x>1460</x><y>430</y><w>140</w><h>70</h></coordinates><panel_attributes>Patron Singleton(R1)
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>1210</x><y>750</y><w>140</w><h>70</h></coordinates><panel_attributes>Patron Strategy(R4)
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>760</x><y>320</y><w>140</w><h>70</h></coordinates><panel_attributes>Patron Chain of
+ responsability(R3)
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>690</x><y>290</y><w>550</w><h>190</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+</panel_attributes><additional_attributes>530;170;280;170;280;10;10;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>590</x><y>10</y><w>140</w><h>70</h></coordinates><panel_attributes>Patron Observer(R2)
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element></diagram>
