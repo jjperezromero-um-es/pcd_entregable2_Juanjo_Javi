@@ -1,7 +1,7 @@
 import pytest
 from datetime import datetime, timedelta
 from Implementación import SistemaIoT, Observable, Operador, ManejadorCalculo, ManejadorUmbral, ManejadorAumentoRapido, EstrategiaMediaDesviacion, EstrategiaCuantiles, EstrategiaMaxMin, ErrorDeSistema, ErrorDeCalculo, ErrorDeEntrada
-
+import time
 
 
 
@@ -33,10 +33,12 @@ def test_estrategia_max_min(capfd: pytest.CaptureFixture[str]):
 def test_operador_actualizar(capfd: pytest.CaptureFixture[str]):
     manejador = ManejadorCalculo(EstrategiaMaxMin())
     operador = Operador(manejador)
-    operador.actualizar((datetime.now(), 22))
+    tiempo_inicio = datetime.now() - timedelta(minutes=2)
+    tiempo_actual = datetime.now()
+    tiempo_transcurrido = (tiempo_actual - tiempo_inicio).total_seconds()
+    operador.actualizar((tiempo_actual, 22), tiempo_transcurrido)
     out, err = capfd.readouterr()
     assert "Temperatura actual" in out
-
 
 def test_instancia_sin_estrategia():
     with pytest.raises(ValueError):
@@ -49,7 +51,13 @@ def test_system_error_on_init():
 def test_estrategia_cuantiles_con_datos_insuficientes():
     estrategia = EstrategiaCuantiles()
     with pytest.raises(ErrorDeCalculo):
-        estrategia.calcular([(datetime.now(), 25)])
+        estrategia.calcular([(datetime.now(), 25)])  
+        
+def test_estrategia_media_y_desviacion_con_datos_insuficientes():
+    estrategia = EstrategiaMediaDesviacion()
+    with pytest.raises(ErrorDeCalculo):
+        estrategia.calcular([(datetime.now(), 25)])  
+
 
 def test_estrategia_cuantiles_con_suficientes_datos():
     estrategia = EstrategiaCuantiles()
