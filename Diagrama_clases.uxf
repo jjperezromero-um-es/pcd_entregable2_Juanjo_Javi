@@ -1,17 +1,17 @@
-<diagram program="umletino" version="15.1"><zoom_level>7</zoom_level><element><id>UMLClass</id><coordinates><x>0</x><y>490</y><w>238</w><h>35</h></coordinates><panel_attributes>EstrategiaCuantiles
+<diagram program="umletino" version="15.1"><zoom_level>9</zoom_level><element><id>UMLClass</id><coordinates><x>0</x><y>567</y><w>306</w><h>45</h></coordinates><panel_attributes>EstrategiaCuantiles
 --
 + calcular(temperaturas: List of List): str
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>441</y><w>238</w><h>35</h></coordinates><panel_attributes>EstrategiaMediaDesviacion
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>504</y><w>306</w><h>45</h></coordinates><panel_attributes>EstrategiaMediaDesviacion
 --
 + calcular(temperaturas: List of List): str
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>553</y><w>238</w><h>35</h></coordinates><panel_attributes>EstrategiaMaxMin
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>648</y><w>306</w><h>45</h></coordinates><panel_attributes>EstrategiaMaxMin
 --
 + calcular(temperaturas: List of List): str
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>294</x><y>483</y><w>238</w><h>42</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>378</x><y>558</y><w>306</w><h>54</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
 EstrategiaCalculo
 --
 + calcular(temperaturas: List of List)
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>231</x><y>497</y><w>77</w><h>84</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>231</x><y>497</y><w>77</w><h>21</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>231</x><y>448</y><w>77</w><h>70</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>525</x><y>490</y><w>56</w><h>21</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>60;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>861</x><y>182</y><w>280</w><h>126</h></coordinates><panel_attributes>SistemaIot
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>297</x><y>576</y><w>99</w><h>108</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>297</x><y>576</y><w>99</w><h>27</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>297</x><y>513</y><w>99</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>675</x><y>567</y><w>72</w><h>27</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>60;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1107</x><y>171</y><w>360</w><h>162</h></coordinates><panel_attributes>SistemaIot
 --
 - _unicaInstancia: SistemaIot
 - datos_temperatura : List
@@ -22,34 +22,45 @@ bg=orange</panel_attributes><additional_attributes></additional_attributes></ele
 --
 + obtener_instancia: SistemaIot
 + iniciar: void
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>567</x><y>469</y><w>147</w><h>49</h></coordinates><panel_attributes>ManejadorCalculo
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>729</x><y>540</y><w>189</w><h>63</h></coordinates><panel_attributes>ManejadorCalculo
 -
 + estrategia
 -
 + manejador_peticion(data)
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>378</x><y>469</y><w>70</w><h>28</h></coordinates><panel_attributes>/AbstractClass/
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>735</x><y>469</y><w>196</w><h>56</h></coordinates><panel_attributes>ManejadorCondiciones
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>486</x><y>540</y><w>90</w><h>36</h></coordinates><panel_attributes>/AbstractClass/
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>945</x><y>531</y><w>252</w><h>72</h></coordinates><panel_attributes>ManejadorUmbral
 -
 + temperaturas
 -
 + manejador_peticion(data)
 + verificar_umbral(temperatura_actual,umbral)
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>644</x><y>287</y><w>147</w><h>56</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>891</x><y>378</y><w>189</w><h>72</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
 Manejador
 -
 + sucesor : Manejador
 -
 + manejador_peticion(data)
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>679</x><y>273</y><w>70</w><h>28</h></coordinates><panel_attributes>/AbstractClass/
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>707</x><y>336</y><w>119</w><h>147</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;150;190</additional_attributes></element><element><id>Relation</id><coordinates><x>637</x><y>336</y><w>91</w><h>147</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>110;10;10;190</additional_attributes></element><element><id>Relation</id><coordinates><x>784</x><y>231</y><w>91</w><h>98</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>110;10;10;120</additional_attributes></element><element><id>UMLClass</id><coordinates><x>665</x><y>49</y><w>147</w><h>70</h></coordinates><panel_attributes>Observable
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>936</x><y>360</y><w>90</w><h>36</h></coordinates><panel_attributes>/AbstractClass/
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1035</x><y>234</y><w>90</w><h>162</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>80;10;10;10;10;160</additional_attributes></element><element><id>UMLClass</id><coordinates><x>855</x><y>0</y><w>189</w><h>90</h></coordinates><panel_attributes>Observable
 -
 + _observadores:list
 -
 + registrar_observadores(observador)
 + notificar_observadores(data)
 + run(run_time_seconds)
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>805</x><y>77</y><w>210</w><h>119</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;280;10;280;150</additional_attributes></element><element><id>UMLClass</id><coordinates><x>490</x><y>175</y><w>147</w><h>35</h></coordinates><panel_attributes>observador
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1035</x><y>36</y><w>270</w><h>153</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;280;10;280;150</additional_attributes></element><element><id>UMLClass</id><coordinates><x>567</x><y>117</y><w>189</w><h>54</h></coordinates><panel_attributes>observador
 -
 @abstractmethod
 + actualizar(data)
-bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>553</x><y>84</y><w>126</w><h>105</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>160;10;10;130</additional_attributes></element></diagram>
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1035</x><y>54</y><w>252</w><h>135</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;260;10;260;130</additional_attributes></element><element><id>Relation</id><coordinates><x>657</x><y>36</y><w>216</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>220;10;10;10;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>603</x><y>162</y><w>63</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>50;10;10;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>522</x><y>243</y><w>189</w><h>90</h></coordinates><panel_attributes>Operador
+-
++ manejador: Manejador
+-
++ actualizar(data): str
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>837</x><y>315</y><w>90</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>80;70;80;10;10;10;10;90;60;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1215</x><y>531</y><w>252</w><h>72</h></coordinates><panel_attributes>ManejadorAumentoRapido
+-
++ temperaturas
+-
++ manejador_peticion(data)
++ comprobar_aumento_rapido()
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>999</x><y>441</y><w>342</w><h>108</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;360;100</additional_attributes></element><element><id>Relation</id><coordinates><x>981</x><y>441</y><w>90</w><h>108</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;80;100</additional_attributes></element><element><id>Relation</id><coordinates><x>783</x><y>441</y><w>216</w><h>117</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>220;10;10;110</additional_attributes></element></diagram>
