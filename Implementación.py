@@ -111,10 +111,10 @@ class ManejadorCalculo(Manejador):
         self.temperaturas = []
 
     def manejador_peticion(self, data, tiempo_inicio):
-        #como quiero calcular las estrategias cada 60 segundos, verifico si el resto de el tiempo transcurrido entre 60 es < a 0.1
-        #no puedo poner que sea exactamente = 0 porque al ser una variable continua nunca llevaremos exactamente 60 segundos   
+        #como quiero calcular las estrategias cada 60 segundos, verifico si el resto de el tiempo transcurrido entre 60 es < a 0.1 
         timestamp, temperatura = data
         self.temperaturas.append((timestamp, temperatura))
+        #no puedo poner que sea exactamente = 0 porque al ser una variable continua nunca llevaremos exactamente 60 segundos  
         if (time.time() - tiempo_inicio)%60 < 0.1 and len(self.temperaturas) > 1:
             try:
                 self.estrategia.calcular(self.temperaturas) # Realiza la estrategía
