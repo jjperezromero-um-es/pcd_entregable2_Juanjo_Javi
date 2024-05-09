@@ -1,6 +1,6 @@
 import pytest
 from datetime import datetime, timedelta
-from Implementación import SistemaIoT, Observable, Operador, ManejadorCalculo, ManejadorCondiciones, EstrategiaMediaDesviacion, EstrategiaCuantiles, EstrategiaMaxMin, ErrorDeSistema, ErrorDeCalculo, ErrorDeEntrada
+from Implementación import SistemaIoT, Observable, Operador, ManejadorCalculo, ManejadorUmbral, ManejadorAumentoRapido, EstrategiaMediaDesviacion, EstrategiaCuantiles, EstrategiaMaxMin, ErrorDeSistema, ErrorDeCalculo, ErrorDeEntrada
 
 
 
@@ -55,11 +55,11 @@ def test_estrategia_cuantiles_con_suficientes_datos():
     estrategia = EstrategiaCuantiles()
     estrategia.calcular([(datetime.now(), 25), (datetime.now(), 30)])
 
-def test_manejador_condiciones_umbral():
-    manejador = ManejadorCondiciones()
+def test_manejador_umbral():
+    manejador = ManejadorUmbral()
     manejador.verificar_umbral(26)
 
-def test_manejador_condiciones_aumento_rapido():
-    manejador = ManejadorCondiciones()
+def test_manejador_aumento_rapido():
+    manejador = ManejadorAumentoRapido()
     manejador.temperaturas = [(datetime.now() - timedelta(seconds=20), 20), (datetime.now(), 32)]
     manejador.comprobar_aumento_rapido()
