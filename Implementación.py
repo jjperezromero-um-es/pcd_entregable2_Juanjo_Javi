@@ -56,23 +56,26 @@ class Observable:
         self._observadores.append(observador)
 
     #Funcion encargada de poner en marcha la función actualizar del Operador
-    def notificar_observadores(self, data):
+    def notificar_observadores(self, data, tiempo_inicio):
         for observador in self._observadores:
-            observador.actualizar(data)
+            observador.actualizar(data, tiempo_inicio)
 
     def run(self, run_time_seconds):
         start_time = time.time()
         while (time.time() - start_time) < run_time_seconds: # El bucle termina cuando se cumple el tiempo de ejecución
+            # Ponemos el time sleep al principio para que cada 60 segundos se generen 12 mediciones de temperatura
+            # Si lo pongo al final, en los primeros 60 segundos se generan 13 mediciones
+            time.sleep(5) # Cada 5 segundos se genera una nueva medición de temperatura
             timestamp = datetime.now()
             temperatura = random.randint(14, 33)
             # Cuando se genera una nueva temperatura ponemos en marcha la funcion notificar_observadores para el Operador actualice la salida
-            self.notificar_observadores((timestamp, temperatura))
-            time.sleep(5) # Cada 5 segundos se genera una nueva medición de temperatura
+            self.notificar_observadores((timestamp, temperatura), start_time)
+            
 
 # Clase abstracta operador que define el metodo abstracto actualizar(Utilizado por el operador)
 class observador(ABC):
     @abstractmethod
-    def actualizar(self, data):
+    def actualizar(self, data, tiempo_inicio):
         pass
 
 # Clase encargada de actualizar la salida cada vez que se recibe una nueva medición de temperatura
@@ -80,13 +83,13 @@ class Operador(observador):
     def __init__(self, manejador):
         self.manejador = manejador
 
-    def actualizar(self, data):
+    def actualizar(self, data, tiempo_inicio):
         # Imprime por pantalla la información de la medición de temperatura y la fecha
         print(f"\n{'-' * 80}")
         print(f"Timestamp: {data[0]}. Temperatura actual: {data[1]}°C")
         # Cuando termina su funcion, pondra en marcha la función del manejador.
         try:
-            self.manejador.manejador_peticion(data)
+            self.manejador.manejador_peticion(data, tiempo_inicio)
         except ErrorDeCalculo as e:
             print(f"Error durante el cálculo: {e}")
 
@@ -95,9 +98,9 @@ class Manejador(ABC): # Clase abstracta Manejador que será la base para la cade
         self.sucesor = sucesor
 
     @abstractmethod
-    def manejador_peticion(self, data):
+    def manejador_peticion(self, data, tiempo_inicio):
         if self.sucesor:
-            self.sucesor.manejador_peticion(data)
+            self.sucesor.manejador_peticion(data, tiempo_inicio)
 
 # Este manejador es la primera parte de nuestra cadena de responsabilidad
 # Se encargará de realizar las estrategias de calculo
@@ -107,16 +110,21 @@ class ManejadorCalculo(Manejador):
         self.estrategia = estrategia
         self.temperaturas = []
 
-    def manejador_peticion(self, data):
+    def manejador_peticion(self, data, tiempo_inicio):
+        #como quiero calcular las estrategias cada 60 segundos, verifico si el resto de el tiempo transcurrido entre 60 es < a 0.1
+        #no puedo poner que sea exactamente = 0 porque al ser una variable continua nunca llevaremos exactamente 60 segundos   
         timestamp, temperatura = data
         self.temperaturas.append((timestamp, temperatura))
-        try:
-            self.estrategia.calcular(self.temperaturas) # Realiza la estrategía
-        except Exception as e:
-            raise ErrorDeCalculo(f"Error en el cálculo de estadísticas: {e}") 
+        if (time.time() - tiempo_inicio)%60 < 0.1 and len(self.temperaturas) > 1:
+            try:
+                self.estrategia.calcular(self.temperaturas) # Realiza la estrategía
+                # Como quiero calcular los valores cada 60 segundos, limpio la lista de temperaturas
+                self.temperaturas = []
+            except Exception as e:
+                raise ErrorDeCalculo(f"Error en el cálculo de estadísticas: {e}") 
         # Si tiene un sucesor(En este caso el sucesor será ManejadorCondiciones), activará la funcion manejador_peticion de ese sucesor
         if self.sucesor:
-            self.sucesor.manejador_peticion(data)
+            self.sucesor.manejador_peticion(data, tiempo_inicio)
         
 # Este manejador es la segunda parte de la cadena de responsabilidad.
 # Aqui se verificará si la temperatura supera el umbral.
@@ -125,7 +133,7 @@ class ManejadorUmbral(Manejador):
         super().__init__(sucesor)
         self.temperaturas = []
 
-    def manejador_peticion(self, data):
+    def manejador_peticion(self, data, tiempo_inicio):
         timestamp, temperatura = data
         self.temperaturas.append((timestamp, temperatura))
         try:
@@ -134,7 +142,7 @@ class ManejadorUmbral(Manejador):
             raise ErrorDeCalculo(f"Error al verificar condiciones: {e}")
         # En este sistema el sucesor será ManejadorAumentoRapido
         if self.sucesor:
-            self.sucesor.manejador_peticion(data)
+            self.sucesor.manejador_peticion(data, tiempo_inicio)
 
     # Función para verificar si la temperatura actual es mayor al umbral establecido (25 grados)
     def verificar_umbral(self, temperatura_actual, umbral=25):
@@ -149,7 +157,7 @@ class ManejadorAumentoRapido(Manejador):
         super().__init__(sucesor)
         self.temperaturas = []
 
-    def manejador_peticion(self, data):
+    def manejador_peticion(self, data, tiempo_inicio):
         timestamp, temperatura = data
         self.temperaturas.append((timestamp, temperatura))
         try:
@@ -157,7 +165,7 @@ class ManejadorAumentoRapido(Manejador):
         except Exception as e:
             raise ErrorDeCalculo(f"Error al verificar condiciones: {e}")
         if self.sucesor:
-            self.sucesor.manejador_peticion(data)
+            self.sucesor.manejador_peticion(data, tiempo_inicio)
 
     # Funcion para comprobar el aumento rapido
     def comprobar_aumento_rapido(self):
@@ -191,7 +199,7 @@ class EstrategiaMediaDesviacion(EstrategiaCalculo):
                 #calculo de la desviacion tipica con la funcion lambda reduce
                 suma_cuadrados = reduce(lambda x, y: x + (y - media) ** 2, temps, 0)
                 desviacion_estandar = (suma_cuadrados / (len(temps) - 1)) ** 0.5
-                print(f"Media: {media:.2f}, Desviación estándar: {desviacion_estandar:.2f}")
+                print(f"Media: {media:.2f} y Desviación estándar: {desviacion_estandar:.2f} en los ultimos 60 segundos")
             except Exception:
                 raise ErrorDeCalculo("Error en cálculo de media y desviación estándar.")
 
@@ -201,7 +209,7 @@ class EstrategiaCuantiles(EstrategiaCalculo):
             temps = list(map(lambda x: x[1], temperaturas))
             try:
                 # Calculo de los cuantiles
-                print(f"Cuantiles: {quantiles(temps)}")
+                print(f"Cuantiles: {quantiles(temps)} en los ultimos 60 segundos")
             except Exception:
                 raise ErrorDeCalculo("Error en el cálculo de cuantiles.")
 
@@ -213,7 +221,7 @@ class EstrategiaMaxMin(EstrategiaCalculo):
                 # Calculo de maximo y minimo mediante la funcion lambda reduce
                 maximo = reduce(lambda x, y: x if x > y else y, temps)
                 minimo = reduce(lambda x, y: x if x < y else y, temps)
-                print(f"Máximo: {maximo}, Mínimo: {minimo}")
+                print(f"Máximo: {maximo} y Mínimo: {minimo} en los ultimos 60 segundos")
             except Exception:
                 raise ErrorDeCalculo("Error en el cálculo de máximo y mínimo.")
 
@@ -247,5 +255,3 @@ if __name__ == '__main__':
     # Ponemos en marcha el sistema
     sistema_iot = SistemaIoT.obtener_instancia(estrategia)
     sistema_iot.iniciar(tiempo_ejecucion)
-
-
