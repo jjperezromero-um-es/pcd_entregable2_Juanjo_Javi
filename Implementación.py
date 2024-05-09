@@ -86,7 +86,7 @@ class Operador(observador):
     def actualizar(self, data, tiempo_inicio):
         # Imprime por pantalla la información de la medición de temperatura y la fecha
         print(f"\n{'-' * 80}")
-        print(f"Timestamp: {data[0]}. Temperatura actual: {data[1]}°C")
+        print(f"Timestamp: {data[0]}. Temperatura actual: {data[1]}°C después de {time.time() - tiempo_inicio:.0f} segundos.")
         # Cuando termina su funcion, pondra en marcha la función del manejador.
         try:
             self.manejador.manejador_peticion(data, tiempo_inicio)
