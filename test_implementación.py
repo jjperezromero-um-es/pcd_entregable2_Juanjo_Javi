@@ -1,75 +1,65 @@
 import pytest
-from Implementación import SistemaIoT, EstrategiaMediaDesviacion, EstrategiaCuantiles, EstrategiaMaxMin, Manejador, Operador, Observable
+from datetime import datetime, timedelta
+from Implementación import SistemaIoT, Observable, Operador, ManejadorCalculo, ManejadorCondiciones, EstrategiaMediaDesviacion, EstrategiaCuantiles, EstrategiaMaxMin, ErrorDeSistema, ErrorDeCalculo, ErrorDeEntrada
 
-def test_singleton():
-    estrategia = EstrategiaMediaDesviacion()
-    sistema1 = SistemaIoT.obtener_instancia(estrategia)
-    sistema2 = SistemaIoT.obtener_instancia(estrategia)
-    assert sistema1 is sistema2, "Singleton pattern should return the same instance"
 
-def test_estrategia_media_desviacion():
+
+
+def sistema_iot():
+    estrategia = EstrategiaMaxMin()  # Elige una estrategia por defecto
+    return SistemaIoT.obtener_instancia(estrategia)
+
+def test_estrategia_media_desviacion(capfd: pytest.CaptureFixture[str]):
     estrategia = EstrategiaMediaDesviacion()
-    temperaturas = [(1, 20), (2, 30), (3, 25)]
+    temperaturas = [(datetime.now(), 20), (datetime.now(), 30), (datetime.now(), 25)]
     estrategia.calcular(temperaturas)
-    # Aquí puedes agregar asserts si tu función tiene salidas concretas o efectos secundarios verificables
+    out, err = capfd.readouterr()
+    assert "Media" in out and "Desviación estándar" in out
 
-def test_estrategia_cuantiles():
+def test_estrategia_cuantiles(capfd: pytest.CaptureFixture[str]):
     estrategia = EstrategiaCuantiles()
-    temperaturas = [(1, 20), (2, 30), (3, 25)]
+    temperaturas = [(datetime.now(), 20), (datetime.now(), 30), (datetime.now(), 25)]
     estrategia.calcular(temperaturas)
-    # Similar, añadir asserts según el caso
+    out, err = capfd.readouterr()
+    assert "Cuantiles" in out
 
-def test_estrategia_max_min():
+def test_estrategia_max_min(capfd: pytest.CaptureFixture[str]):
     estrategia = EstrategiaMaxMin()
-    temperaturas = [(1, 20), (2, 30), (3, 25)]
+    temperaturas = [(datetime.now(), 20), (datetime.now(), 30), (datetime.now(), 25)]
     estrategia.calcular(temperaturas)
-    # Añade asserts para verificar max y min
+    out, err = capfd.readouterr()
+    assert "Máximo" in out and "Mínimo" in out
 
-def test_operador_update():
-    manejador = Manejador(EstrategiaMaxMin())
+def test_operador_actualizar(capfd: pytest.CaptureFixture[str]):
+    manejador = ManejadorCalculo(EstrategiaMaxMin())
     operador = Operador(manejador)
-    operador.update((1, 22))
-    # Verifica si se manejan los datos correctamente
-
-def test_manejador_handle_request():
-    estrategia = EstrategiaMaxMin()
-    manejador = Manejador(estrategia)
-    manejador.handle_request((1, 35))
-    assert manejador.temperaturas[-1] == (1, 35), "Temperature should be logged correctly"
-
-def test_verificar_umbral():
-    estrategia = EstrategiaMaxMin()
-    manejador = Manejador(estrategia)
-    
-    try:
-        manejador.verificar_umbral(26)  # Temperatura superior al umbral por defecto de 25
-        executed = True
-    except Exception as e:
-        executed = False
-    
-    assert executed, "La función debería ejecutarse sin errores"
+    operador.actualizar((datetime.now(), 22))
+    out, err = capfd.readouterr()
+    assert "Temperatura actual" in out
 
 
-def test_comprobar_aumento_rapido():
-    estrategia = EstrategiaMaxMin()
-    manejador = Manejador(estrategia)
-    manejador.temperaturas = [(1, 20), (2, 35)]
-    # Aquí podrías evaluar el comportamiento de la función en situaciones límite
+def test_instancia_sin_estrategia():
+    with pytest.raises(ValueError):
+        SistemaIoT.obtener_instancia()
 
-@pytest.mark.parametrize("input_strat, expected_type", [
-    ("1", EstrategiaMediaDesviacion),
-    ("2", EstrategiaCuantiles),
-    ("3", EstrategiaMaxMin),
-])
-def test_input_estrategia(input_strat, expected_type):
-    if input_strat == '1':
-        estrategia = EstrategiaMediaDesviacion()
-    elif input_strat == '2':
-        estrategia = EstrategiaCuantiles()
-    elif input_strat == '3':
-        estrategia = EstrategiaMaxMin()
-    else:
-        with pytest.raises(ValueError):
-            pass  # Aquí se probaría que el error es levantado correctamente
-    assert isinstance(estrategia, expected_type), "Strategy should match the input"
+def test_system_error_on_init():
+    with pytest.raises(ValueError):
+        SistemaIoT.obtener_instancia()
+        
+def test_estrategia_cuantiles_con_datos_insuficientes():
+    estrategia = EstrategiaCuantiles()
+    with pytest.raises(ErrorDeCalculo):
+        estrategia.calcular([(datetime.now(), 25)])
 
+def test_estrategia_cuantiles_con_suficientes_datos():
+    estrategia = EstrategiaCuantiles()
+    estrategia.calcular([(datetime.now(), 25), (datetime.now(), 30)])
+
+def test_manejador_condiciones_umbral():
+    manejador = ManejadorCondiciones()
+    manejador.verificar_umbral(26)
+
+def test_manejador_condiciones_aumento_rapido():
+    manejador = ManejadorCondiciones()
+    manejador.temperaturas = [(datetime.now() - timedelta(seconds=20), 20), (datetime.now(), 32)]
+    manejador.comprobar_aumento_rapido()
