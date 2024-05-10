@@ -114,12 +114,12 @@ class ManejadorCalculo(Manejador):
         #como quiero calcular las estrategias cada 60 segundos, verifico si el resto de el tiempo transcurrido entre 60 es < a 0.1 
         timestamp, temperatura = data
         self.temperaturas.append((timestamp, temperatura))
-        #no puedo poner que sea exactamente = 0 porque al ser una variable continua nunca llevaremos exactamente 60 segundos  
+        # No puedo poner que sea exactamente = 0 porque al ser una variable continua nunca llevaremos exactamente 60 segundos  
         if (time.time() - tiempo_inicio)%60 < 0.1 and len(self.temperaturas) > 1:
             try:
-                self.estrategia.calcular(self.temperaturas) # Realiza la estrategía
-                # Como quiero calcular los valores cada 60 segundos, limpio la lista de temperaturas
-                self.temperaturas = []
+                # Seleccionamos las temperaturas en los ultimos 60 segundos para hacer la estrategia en cuestion
+                temperaturas_ultimos_60_segundos = self.temperaturas[-12:]
+                self.estrategia.calcular(temperaturas_ultimos_60_segundos) # Realiza la estrategía
             except Exception as e:
                 raise ErrorDeCalculo(f"Error en el cálculo de estadísticas: {e}") 
         # Si tiene un sucesor(En este caso el sucesor será ManejadorCondiciones), activará la funcion manejador_peticion de ese sucesor
