@@ -181,15 +181,15 @@ class ManejadorAumentoRapido(Manejador):
 # Funcion abstracta calcular que utilizamos posteriormente en cada estrategia
 class EstrategiaCalculo(ABC):
     @abstractmethod
-    def calcular(self, datos):
+    def calcular(self, temperaturas):
+        if not temperaturas:
+            raise ErrorDeCalculo("Dato de entrada vacío o incorrecto")
         pass
 
 #A continuacion las implementaciones de cada estrategia de calculo que tendra el sistema
 class EstrategiaMediaDesviacion(EstrategiaCalculo):
     def calcular(self, temperaturas):
-            if len(temperaturas) < 2: 
-                raise ErrorDeCalculo("Datos insuficientes para calcular cuantiles.")
-            temps = list(map(lambda x: x[1], temperaturas))
+        if len(temperaturas) >= 2:
             # Metemos SOLO las temperaturas en una lista para calcular lo necesario con ellas
             temps = list(map(lambda x: x[1], temperaturas))
             try:
@@ -205,8 +205,7 @@ class EstrategiaMediaDesviacion(EstrategiaCalculo):
 
 class EstrategiaCuantiles(EstrategiaCalculo):
     def calcular(self, temperaturas):
-            if len(temperaturas) < 2:
-                raise ErrorDeCalculo("Datos insuficientes para calcular cuantiles.")
+        if len(temperaturas) >= 2:
             temps = list(map(lambda x: x[1], temperaturas))
             try:
                 # Calculo de los cuantiles
@@ -215,9 +214,7 @@ class EstrategiaCuantiles(EstrategiaCalculo):
                 raise ErrorDeCalculo("Error en el cálculo de cuantiles.")
 
 class EstrategiaMaxMin(EstrategiaCalculo):
-    def calcular(self, temperaturas): 
-        if len(temperaturas) < 2:  # Si se necesita al menos dos datos para calcular cuantiles
-            raise ErrorDeCalculo("Datos insuficientes para calcular cuantiles")        
+    def calcular(self, temperaturas):
         if temperaturas:
             temps = list(map(lambda x: x[1], temperaturas))
             try:
