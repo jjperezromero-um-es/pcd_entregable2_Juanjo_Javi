@@ -1,0 +1,66 @@
+<diagram program="umletino" version="15.1"><zoom_level>9</zoom_level><element><id>UMLClass</id><coordinates><x>0</x><y>567</y><w>306</w><h>45</h></coordinates><panel_attributes>EstrategiaCuantiles
+--
++ calcular(temperaturas: List of List): str
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>504</y><w>306</w><h>45</h></coordinates><panel_attributes>EstrategiaMediaDesviacion
+--
++ calcular(temperaturas: List of List): str
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>648</y><w>306</w><h>45</h></coordinates><panel_attributes>EstrategiaMaxMin
+--
++ calcular(temperaturas: List of List): str
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>378</x><y>558</y><w>306</w><h>54</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+EstrategiaCalculo
+--
++ calcular(temperaturas: List of List)
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>297</x><y>576</y><w>99</w><h>108</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>297</x><y>576</y><w>99</w><h>27</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>297</x><y>513</y><w>99</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>675</x><y>567</y><w>72</w><h>27</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>60;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1107</x><y>171</y><w>360</w><h>162</h></coordinates><panel_attributes>SistemaIot
+--
+- _unicaInstancia: SistemaIot
+- datos_temperatura : List
+- observable : Observable()
+- ManejadorCondiciones: ManejadorCondiciones
+- manejador: ManejadorCalculo(estrategia, ManejadorCondiciones)
+- operador = Operador(manejador)
+--
++ obtener_instancia: SistemaIot
++ iniciar: void
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>729</x><y>540</y><w>189</w><h>63</h></coordinates><panel_attributes>ManejadorCalculo
+-
++ estrategia
+-
++ manejador_peticion(data)
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>486</x><y>540</y><w>90</w><h>36</h></coordinates><panel_attributes>/AbstractClass/
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>945</x><y>531</y><w>252</w><h>72</h></coordinates><panel_attributes>ManejadorUmbral
+-
++ temperaturas
+-
++ manejador_peticion(data)
++ verificar_umbral(temperatura_actual,umbral)
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>891</x><y>378</y><w>189</w><h>72</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+Manejador
+-
++ sucesor : Manejador
+-
++ manejador_peticion(data)
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>936</x><y>360</y><w>90</w><h>36</h></coordinates><panel_attributes>/AbstractClass/
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1035</x><y>234</y><w>90</w><h>162</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>80;10;10;10;10;160</additional_attributes></element><element><id>UMLClass</id><coordinates><x>855</x><y>0</y><w>189</w><h>90</h></coordinates><panel_attributes>Observable
+-
++ _observadores:list
+-
++ registrar_observadores(observador)
++ notificar_observadores(data)
++ run(run_time_seconds)
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1035</x><y>36</y><w>270</w><h>153</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;280;10;280;150</additional_attributes></element><element><id>UMLClass</id><coordinates><x>567</x><y>117</y><w>189</w><h>54</h></coordinates><panel_attributes>observador
+-
+@abstractmethod
++ actualizar(data)
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1035</x><y>54</y><w>252</w><h>135</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;260;10;260;130</additional_attributes></element><element><id>Relation</id><coordinates><x>657</x><y>36</y><w>216</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>220;10;10;10;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>603</x><y>162</y><w>63</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>50;10;10;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>522</x><y>243</y><w>189</w><h>90</h></coordinates><panel_attributes>Operador
+-
++ manejador: Manejador
+-
++ actualizar(data): str
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>837</x><y>315</y><w>90</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>80;70;80;10;10;10;10;90;60;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1215</x><y>531</y><w>252</w><h>72</h></coordinates><panel_attributes>ManejadorAumentoRapido
+-
++ temperaturas
+-
++ manejador_peticion(data)
++ comprobar_aumento_rapido()
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>999</x><y>441</y><w>342</w><h>108</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;360;100</additional_attributes></element><element><id>Relation</id><coordinates><x>981</x><y>441</y><w>90</w><h>108</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;80;100</additional_attributes></element><element><id>Relation</id><coordinates><x>783</x><y>441</y><w>216</w><h>117</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>220;10;10;110</additional_attributes></element></diagram>
